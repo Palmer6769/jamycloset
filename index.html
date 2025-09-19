@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JammyCloset - Online Shop</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #fafafa;
+      color: #333;
+    }
+    header {
+      background: #e91e63;
+      color: white;
+      text-align: center;
+      padding: 20px;
+    }
+    .products {
+      padding: 20px;
+    }
+    .product-list {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .product {
+      background: white;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      width: 200px;
+      text-align: center;
+    }
+    .image-placeholder {
+      width: 180px;
+      height: 180px;
+      background: #f2f2f2;
+      color: #888;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border: 2px dashed #ccc;
+      margin-bottom: 10px;
+      font-size: 14px;
+    }
+    button {
+      background: #e91e63;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #c2185b;
+    }
+    .cart {
+      padding: 20px;
+      background: #fff3f6;
+      margin: 20px;
+      border-radius: 8px;
+    }
+    .payment {
+      margin-top: 20px;
+      padding: 15px;
+      border: 1px solid #ddd;
+      background: #f9f9f9;
+      border-radius: 8px;
+    }
+    .payment h3 {
+      margin-bottom: 10px;
+      color: #444;
+    }
+    .payment p {
+      margin: 5px 0;
+      font-size: 14px;
+    }
+    footer {
+      text-align: center;
+      padding: 15px;
+      background: #333;
+      color: white;
+      margin-top: 20px;
+    }
+    .copy-success {
+      color: green;
+      font-size: 12px;
+      display: none;
+      margin-top: 5px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>JammyCloset</h1>
+    <p>Fashion at your fingertips 👗👠👜</p>
+  </header>
+
+  <section class="products">
+    <h2>Our Products</h2>
+    <div class="product-list">
+      <div class="product">
+        <div class="image-placeholder">Image coming soon</div>
+        <h3>Dress</h3>
+        <p>KSh 2,000</p>
+        <button onclick="addToCart('Dress', 2000)">Add to Cart</button>
+      </div>
+      <div class="product">
+        <div class="image-placeholder">Image coming soon</div>
+        <h3>Shoes</h3>
+        <p>KSh 3,500</p>
+        <button onclick="addToCart('Shoes', 3500)">Add to Cart</button>
+      </div>
+      <div class="product">
+        <div class="image-placeholder">Image coming soon</div>
+        <h3>Bag</h3>
+        <p>KSh 1,500</p>
+        <button onclick="addToCart('Bag', 1500)">Add to Cart</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="cart">
+    <h2>Your Cart</h2>
+    <ul id="cart-items"></ul>
+    <p>Total: KSh <span id="cart-total">0</span></p>
+    <button onclick="checkout()">Checkout on WhatsApp</button>
+
+    <div class="payment">
+      <h3>Pay with M-Pesa</h3>
+      <p>Send payment to:</p>
+      <p><strong id="mpesa-number">0759556632</strong></p>
+      <button onclick="copyNumber()">Copy Number</button>
+      <div id="copy-success" class="copy-success">✔ Number copied!</div>
+      <small>After payment, confirm on WhatsApp.</small>
+    </div>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 JammyCloset. All rights reserved.</p>
+  </footer>
+
+  <script>
+    let cart = [];
+    let total = 0;
+
+    function addToCart(product, price) {
+      cart.push({ name: product, price: price });
+      total += price;
+      updateCart();
+    }
+
+    function updateCart() {
+      let cartItems = document.getElementById("cart-items");
+      let cartTotal = document.getElementById("cart-total");
+
+      cartItems.innerHTML = "";
+      cart.forEach(item => {
+        let li = document.createElement("li");
+        li.textContent = `${item.name} - KSh ${item.price}`;
+        cartItems.appendChild(li);
+      });
+
+      cartTotal.textContent = total;
+    }
+
+    function checkout() {
+      if (cart.length === 0) {
+        alert("Your cart is empty!");
+        return;
+      }
+
+      let message = "Hello JammyCloset! I'd like to order:\n";
+      cart.forEach(item => {
+        message += `${item.name} - KSh ${item.price}\n`;
+      });
+      message += `\nTotal: KSh ${total}\n\nI have paid to 0759556632.`;
+
+      // WhatsApp link with your wife's number
+      window.open(`https://wa.me/254759556632?text=${encodeURIComponent(message)}`, "_blank");
+    }
+
+    function copyNumber() {
+      const number = document.getElementById("mpesa-number").innerText;
+      navigator.clipboard.writeText(number).then(() => {
+        const success = document.getElementById("copy-success");
+        success.style.display = "block";
+        setTimeout(() => success.style.display = "none", 2000);
+      });
+    }
+  </script>
+</body>
+</html>
